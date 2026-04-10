@@ -11,7 +11,7 @@ const TAGS = [
 
 function calcTime() {
   const now = new Date();
-  const diff = DUE_DATE - now;
+  const diff = DUE_DATE.getTime() - now.getTime();
   const abs = Math.abs(diff);
   const mins = Math.floor(abs / 60000);
   const hrs = Math.floor(abs / 3600000);
