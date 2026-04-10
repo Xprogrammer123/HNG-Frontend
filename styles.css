@@ -1,4 +1,4 @@
-/* Reset & Base Styles */
+/* Reset & Base */
 *,
 *::before,
 *::after {
@@ -9,7 +9,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: white;
   min-height: 100vh;
   padding: 20px;
 }
@@ -22,43 +22,46 @@ main {
 }
 
 /* Card Container */
-.todo-card {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  padding: 24px;
-  width: 100%;
-  max-width: 480px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.card {
+  margin: auto;
+  width: min(300px, 100%);
+  background-color: #fefefe;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  color: #141417;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.todo-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Header Section */
-.todo-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 16px;
+/* Hero Section */
+.card__hero {
+  background-color: #fef4e2;
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 1.5rem;
+  font-size: 0.875rem;
 }
 
-.todo-title {
-  flex: 1 1 0;
-  font-size: 1.25rem;
+.card__hero .card__job-title {
+  margin: 2rem 0;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #1a1a2e;
-  margin: 0;
+  padding-right: 2rem;
   line-height: 1.4;
 }
 
-.todo-meta {
+.card__hero-header {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  font-weight: 700;
 }
 
 /* Priority Badge */
@@ -89,56 +92,41 @@ main {
   color: #c62828;
 }
 
-/* Status Badge */
-.status-badge {
-  display: inline-flex;
+/* Card Icon */
+.card__icon {
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
 }
 
-.status-pending {
-  background: #f5f5f5;
-  color: #757575;
-}
-
-.status-in-progress {
-  background: #e3f2fd;
-  color: #1976d2;
-}
-
-.status-done {
-  background: #e8f5e9;
-  color: #2e7d32;
+.card__icon svg {
+  stroke: currentColor;
 }
 
 /* Description */
-.todo-description {
-  font-size: 0.95rem;
-  color: #424242;
+.card__description {
+  font-size: 0.9rem;
+  color: #6b7280;
   line-height: 1.6;
-  margin: 0 0 20px 0;
+  margin: 1rem 0;
+  padding: 0 1rem;
 }
 
-/* Due Date Section */
-.todo-due-section {
+/* Meta Section */
+.card__meta {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 20px;
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 0 1rem 1rem 1rem;
 }
 
 .due-date {
   font-size: 0.875rem;
-  color: #666;
+  color: #9ca3af;
   font-weight: 500;
 }
 
@@ -161,11 +149,11 @@ main {
 }
 
 /* Tags */
-.todo-tags {
+.card__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 20px;
+  margin: 0 1rem;
   padding: 0;
   list-style: none;
 }
@@ -196,91 +184,164 @@ main {
   color: #880e4f;
 }
 
-/* Actions */
-.todo-actions {
+/* Footer */
+.card__footer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: start;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  padding: 0.75rem;
+  row-gap: 1rem;
+  font-weight: 700;
+  font-size: 0.875rem;
 }
 
+@media (min-width: 340px) {
+  .card__footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+/* Job Summary */
+.card__job-summary {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background: #f5f5f5;
+  color: #757575;
+}
+
+.status-in-progress {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-done {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Card Actions */
+.card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (min-width: 340px) {
+  .card__actions {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+/* Complete Toggle */
 .todo-complete-label {
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
   user-select: none;
+  font-size: 0.875rem;
+  color: #4b5563;
 }
 
 .todo-complete-toggle {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
   accent-color: #2e7d32;
 }
 
-.todo-complete-text {
-  font-size: 0.9rem;
-  color: #424242;
-}
-
-.action-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
+/* Buttons */
+.card__btn {
+  width: 100%;
+  font-weight: 400;
   border: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  display: block;
   cursor: pointer;
+  text-align: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
 }
 
-.edit-btn {
-  background: #667eea;
-  color: #ffffff;
+@media (min-width: 340px) {
+  .card__btn {
+    width: max-content;
+  }
 }
 
-.edit-btn:hover {
-  background: #5a6fd6;
+.card__btn--edit {
+  background-color: #667eea;
+  color: #fff;
 }
 
-.edit-btn:focus {
+.card__btn--edit:hover {
+  background-color: #5a6fd6;
+  transform: translateY(-1px);
+}
+
+.card__btn--edit:focus {
   outline: 2px solid #667eea;
   outline-offset: 2px;
 }
 
-.delete-btn {
-  background: #f44336;
-  color: #ffffff;
+.card__btn--delete {
+  background-color: #f44336;
+  color: #fff;
 }
 
-.delete-btn:hover {
-  background: #d32f2f;
+.card__btn--delete:hover {
+  background-color: #d32f2f;
+  transform: translateY(-1px);
 }
 
-.delete-btn:focus {
+.card__btn--delete:focus {
   outline: 2px solid #f44336;
   outline-offset: 2px;
 }
 
 /* Completed State */
-.todo-card.completed {
+.card.completed {
   opacity: 0.8;
 }
 
-.todo-card.completed .todo-title {
+.card.completed .card__job-title {
   text-decoration: line-through;
-  color: #9e9e9e;
+  color: #9ca3af;
 }
 
-.todo-card.completed .todo-description {
-  color: #bdbdbd;
+.card.completed .card__description {
+  color: #d1d5db;
 }
 
-.todo-card.completed .status-badge {
+.card.completed .status-badge {
   background: #e8f5e9;
   color: #2e7d32;
 }
@@ -300,58 +361,30 @@ main {
   outline-offset: 2px;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 480px) {
-  body {
-    padding: 10px;
+/* Responsive */
+@media (max-width: 340px) {
+  .card {
+    padding: 0.375rem;
   }
   
-  .todo-card {
-    padding: 16px;
-    border-radius: 12px;
+  .card__hero {
+    padding: 1rem;
   }
   
-  .todo-title {
-    font-size: 1.1rem;
+  .card__hero .card__job-title {
+    margin: 1.5rem 0;
+    font-size: 1.25rem;
   }
   
-  .todo-description {
-    font-size: 0.9rem;
-  }
-  
-  .todo-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-  
-  .todo-complete-label {
-    justify-content: center;
-  }
-  
-  .action-btn {
-    width: 100%;
+  .card__description {
+    font-size: 0.85rem;
+    padding: 0 0.75rem;
   }
 }
 
-@media (max-width: 360px) {
-  .todo-card {
-    padding: 12px;
-  }
-  
-  .todo-title {
-    font-size: 1rem;
-  }
-  
-  .priority-badge,
-  .status-badge {
-    font-size: 0.6875rem;
-    padding: 3px 8px;
-  }
-}
-
-/* High Contrast Mode Support */
+/* High Contrast */
 @media (prefers-contrast: high) {
-  .todo-card {
+  .card {
     border: 2px solid #000;
   }
   
@@ -362,10 +395,10 @@ main {
   }
 }
 
-/* Reduced Motion Support */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .todo-card,
-  .action-btn {
+  .card,
+  .card__btn {
     transition: none;
   }
 }
