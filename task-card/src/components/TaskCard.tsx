@@ -1,18 +1,53 @@
 import './TaskCard.css';
 import { useState, useEffect, useCallback } from "react";
 
+/* ---------------- TYPES ---------------- */
+
+type Urgency = "safe" | "soon" | "overdue" | "now";
+type Tag = "work" | "urgent" | "design";
+
+interface TimeInfo {
+  text: string;
+  urgency: Urgency;
+}
+
+/* ---------------- CONSTANTS ---------------- */
+
 const DUE_DATE = new Date("2026-05-01T18:00:00Z");
 
-const TAGS = [
+const TAGS: { id: Tag; label: string }[] = [
   { id: "work", label: "work" },
   { id: "urgent", label: "urgent" },
   { id: "design", label: "design" },
 ];
 
-function calcTime() {
+const URGENCY_COLOR: Record<Urgency, string> = {
+  safe: "#059669",
+  soon: "#d97706",
+  overdue: "#dc2626",
+  now: "#dc2626",
+};
+
+const URGENCY_BG: Record<Urgency, string> = {
+  safe: "#ecfdf5",
+  soon: "#fffbeb",
+  overdue: "#fef2f2",
+  now: "#fef2f2",
+};
+
+const TAG_STYLES: Record<Tag, { background: string; color: string }> = {
+  work: { background: "#eff6ff", color: "#1d4ed8" },
+  urgent: { background: "#fef2f2", color: "#b91c1c" },
+  design: { background: "#fdf4ff", color: "#7e22ce" },
+};
+
+/* ---------------- HELPERS ---------------- */
+
+function calcTime(): TimeInfo {
   const now = new Date();
   const diff = DUE_DATE.getTime() - now.getTime();
   const abs = Math.abs(diff);
+
   const mins = Math.floor(abs / 60000);
   const hrs = Math.floor(abs / 3600000);
   const days = Math.floor(abs / 86400000);
@@ -21,7 +56,9 @@ function calcTime() {
   const isOverdue = diff < 0;
   const isDueNow = diff >= 0 && diff < 60000;
 
-  let text, urgency;
+  let text: string;
+  let urgency: Urgency;
+
   if (isDueNow) {
     text = "Due now!";
     urgency = "now";
@@ -31,36 +68,47 @@ function calcTime() {
     else text = `Overdue by ${days} day${days !== 1 ? "s" : ""}`;
     urgency = "overdue";
   } else {
-    if (months > 1) { text = `Due in ${months} months`; urgency = "safe"; }
-    else if (days > 3) { text = `Due in ${days} days`; urgency = "safe"; }
-    else if (days === 1) { text = "Due tomorrow"; urgency = "soon"; }
-    else if (days > 0) { text = `Due in ${days} day${days !== 1 ? "s" : ""}`; urgency = "soon"; }
-    else if (hrs > 0) { text = `Due in ${hrs}h`; urgency = "soon"; }
-    else { text = `Due in ${mins}m`; urgency = "now"; }
+    if (months > 1) {
+      text = `Due in ${months} months`;
+      urgency = "safe";
+    } else if (days > 3) {
+      text = `Due in ${days} days`;
+      urgency = "safe";
+    } else if (days === 1) {
+      text = "Due tomorrow";
+      urgency = "soon";
+    } else if (days > 0) {
+      text = `Due in ${days} day${days !== 1 ? "s" : ""}`;
+      urgency = "soon";
+    } else if (hrs > 0) {
+      text = `Due in ${hrs}h`;
+      urgency = "soon";
+    } else {
+      text = `Due in ${mins}m`;
+      urgency = "now";
+    }
   }
+
   return { text, urgency };
 }
 
-const URGENCY_COLOR = { safe: "#059669", soon: "#d97706", overdue: "#dc2626", now: "#dc2626" };
-const URGENCY_BG    = { safe: "#ecfdf5", soon: "#fffbeb", overdue: "#fef2f2", now: "#fef2f2" };
-const TAG_STYLES    = {
-  work:   { background: "#eff6ff", color: "#1d4ed8" },
-  urgent: { background: "#fef2f2", color: "#b91c1c" },
-  design: { background: "#fdf4ff", color: "#7e22ce" },
-};
+/* ---------------- COMPONENT ---------------- */
 
 export default function TaskCard() {
-  const [done, setDone]         = useState(false);
-  const [deleted, setDeleted]   = useState(false);
-  const [editing, setEditing]   = useState(false);
-  const [title, setTitle]       = useState("Design System Review");
-  const [desc, setDesc]         = useState(
+  const [done, setDone] = useState(false);
+  const [deleted, setDeleted] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  const [title, setTitle] = useState("Design System Review");
+  const [desc, setDesc] = useState(
     "Review the new design system components and provide feedback on accessibility and consistency across the design tokens."
   );
+
   const [editTitle, setEditTitle] = useState(title);
-  const [editDesc, setEditDesc]   = useState(desc);
-  const [timeInfo, setTimeInfo]   = useState(calcTime);
-  const [pulse, setPulse]         = useState(false);
+  const [editDesc, setEditDesc] = useState(desc);
+
+  const [timeInfo, setTimeInfo] = useState<TimeInfo>(calcTime);
+  const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setTimeInfo(calcTime()), 30000);
@@ -82,7 +130,9 @@ export default function TaskCard() {
   }, [editTitle, editDesc]);
 
   const dueFmt = DUE_DATE.toLocaleDateString("en-US", {
-    month: "short", day: "numeric", year: "numeric",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
 
   const status = done ? "Done" : "Pending";
@@ -97,25 +147,16 @@ export default function TaskCard() {
   }
 
   return (
-    <article
-      data-testid="test-todo-card"
-      className={`card${done ? " card--done" : ""}`}
-    >
-      {/* Hero */}
+    <article data-testid="test-todo-card" className={`card${done ? " card--done" : ""}`}>
+      
+      {/* HERO */}
       <section className="card__hero">
         <header className="card__hero-header">
           <span data-testid="test-todo-priority" className="badge badge--priority-high">
             High
           </span>
 
-          <label
-            className="check-label"
-            style={{
-              background: done ? "#ecfdf5" : "#f3f4f6",
-              border: `1px solid ${done ? "#a7f3d0" : "#e5e7eb"}`,
-              transform: pulse ? "scale(0.95)" : "scale(1)",
-            }}
-          >
+          <label className="check-label">
             <input
               type="checkbox"
               data-testid="test-todo-complete-toggle"
@@ -124,7 +165,7 @@ export default function TaskCard() {
               onChange={handleCheck}
               aria-label="Mark task as complete"
             />
-            <span className="check-text" style={{ color: done ? "#059669" : "#6b7280" }}>
+            <span className="check-text">
               {done ? "Done" : "Mark done"}
             </span>
           </label>
@@ -138,20 +179,13 @@ export default function TaskCard() {
             autoFocus
           />
         ) : (
-          <h2
-            data-testid="test-todo-title"
-            className="card__title"
-            style={{
-              color: done ? "#9ca3af" : "#111827",
-              textDecoration: done ? "line-through" : "none",
-            }}
-          >
+          <h2 data-testid="test-todo-title" className="card__title">
             {title}
           </h2>
         )}
       </section>
 
-      {/* Body */}
+      {/* BODY */}
       <div className="card__body">
         {editing ? (
           <div className="edit-block">
@@ -161,16 +195,12 @@ export default function TaskCard() {
               onChange={(e) => setEditDesc(e.target.value)}
             />
             <div className="edit-actions">
-              <button className="btn btn--save" onClick={saveEdit}>Save</button>
-              <button className="btn btn--cancel" onClick={() => setEditing(false)}>Cancel</button>
+              <button onClick={saveEdit}>Save</button>
+              <button onClick={() => setEditing(false)}>Cancel</button>
             </div>
           </div>
         ) : (
-          <p
-            data-testid="test-todo-description"
-            className="card__desc"
-            style={{ color: done ? "#d1d5db" : "#6b7280" }}
-          >
+          <p data-testid="test-todo-description" className="card__desc">
             {desc}
           </p>
         )}
@@ -179,11 +209,11 @@ export default function TaskCard() {
           <div className="card__meta">
             <time
               data-testid="test-todo-due-date"
-              dateTime="2026-05-01T18:00:00Z"
-              className="due-date"
+              dateTime={DUE_DATE.toISOString()}
             >
               Due {dueFmt}
             </time>
+
             <span
               data-testid="test-todo-time-remaining"
               aria-live="polite"
@@ -198,14 +228,10 @@ export default function TaskCard() {
           </div>
         )}
 
-        <ul data-testid="test-todo-tags" role="list" className="card__tags">
+        <ul data-testid="test-todo-tags" role="list">
           {TAGS.map(({ id, label }) => (
             <li key={id}>
-              <span
-                data-testid={`test-todo-tag-${id}`}
-                className="tag"
-                style={TAG_STYLES[id] || { background: "#f3f4f6", color: "#374151" }}
-              >
+              <span data-testid={`test-todo-tag-${id}`} style={TAG_STYLES[id]}>
                 {label}
               </span>
             </li>
@@ -213,28 +239,26 @@ export default function TaskCard() {
         </ul>
       </div>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <footer className="card__footer">
-        <span
-          data-testid="test-todo-status"
-          className={`badge badge--status-${status.toLowerCase()}`}
-        >
+        <span data-testid="test-todo-status">
           {status}
         </span>
 
-        <div className="card__actions">
+        <div>
           <button
             data-testid="test-todo-edit-button"
-            aria-label="Edit task"
-            className="btn btn--edit"
-            onClick={() => { setEditTitle(title); setEditDesc(desc); setEditing(true); }}
+            onClick={() => {
+              setEditTitle(title);
+              setEditDesc(desc);
+              setEditing(true);
+            }}
           >
             Edit
           </button>
+
           <button
             data-testid="test-todo-delete-button"
-            aria-label="Delete task"
-            className="btn btn--delete"
             onClick={handleDelete}
           >
             Delete
