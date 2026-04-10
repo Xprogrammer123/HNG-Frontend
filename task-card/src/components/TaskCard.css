@@ -56,7 +56,51 @@
 }
 /* ─── Hero ─────────────────────────────────────────────────── */
 
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
 
+.save-btn, .cancel-btn, .edit-btn, .delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.save-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+.edit-btn, .delete-btn {
+  padding: 8px 14px;
+}
+
+.edit-btn:hover { background: #eff6ff; color: #1e40af; }
+.delete-btn:hover { background: #fef2f2; color: #b91c1c; }
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
 .card__hero-header {
   display: flex;
   justify-content: space-between;

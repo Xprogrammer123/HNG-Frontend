@@ -1,5 +1,6 @@
 import './TaskCard.css';
 import { useState, useEffect, useCallback } from "react";
+import { Edit2, Trash2, Check, X } from 'lucide-react';
 
 /* ---------------- TYPES ---------------- */
 
@@ -115,8 +116,8 @@ export default function TaskCard() {
   }, []);
 
   const handleCheck = useCallback(() => {
-  setDone((p) => !p);
-}, []);
+    setDone((p) => !p);
+  }, []);
 
   const handleDelete = useCallback(() => setDeleted(true), []);
 
@@ -132,13 +133,13 @@ export default function TaskCard() {
     year: "numeric",
   });
 
-  const status = done ? "Done" : "Pending";
+  const status = done ? "Completed" : "To do";
 
   if (deleted) {
     return (
       <div className="deleted-state">
         <div className="deleted-icon">✓</div>
-        <p>Task removed</p>
+        <p>Task has been deleted</p>
       </div>
     );
   }
@@ -163,7 +164,7 @@ export default function TaskCard() {
               aria-label="Mark task as complete"
             />
             <span className="check-text">
-              {done ? "Done" : "Mark done"}
+              {done ? "Completed" : "Mark as done"}
             </span>
           </label>
         </header>
@@ -192,8 +193,20 @@ export default function TaskCard() {
               onChange={(e) => setEditDesc(e.target.value)}
             />
             <div className="edit-actions">
-              <button onClick={saveEdit}>Save</button>
-              <button onClick={() => setEditing(false)}>Cancel</button>
+              <button 
+                onClick={saveEdit}
+                className="save-btn"
+              >
+                <Check size={18} />
+                Save changes
+              </button>
+              <button 
+                onClick={() => setEditing(false)}
+                className="cancel-btn"
+              >
+                <X size={18} />
+                Cancel
+              </button>
             </div>
           </div>
         ) : (
@@ -242,7 +255,7 @@ export default function TaskCard() {
           {status}
         </span>
 
-        <div>
+        <div className="action-buttons">
           <button
             data-testid="test-todo-edit-button"
             onClick={() => {
@@ -250,14 +263,18 @@ export default function TaskCard() {
               setEditDesc(desc);
               setEditing(true);
             }}
+            className="edit-btn"
           >
+            <Edit2 size={18} />
             Edit
           </button>
 
           <button
             data-testid="test-todo-delete-button"
             onClick={handleDelete}
+            className="delete-btn"
           >
+            <Trash2 size={18} />
             Delete
           </button>
         </div>
