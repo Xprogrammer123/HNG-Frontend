@@ -1,0 +1,242 @@
+/* ─── Card ─────────────────────────────────────────────────── */
+.card {
+  width: min(460px, 100%);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  transition: opacity 0.3s, transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.card--done {
+  opacity: 0.72;
+}
+
+/* ─── Hero ─────────────────────────────────────────────────── */
+.card__hero {
+  background: #fafafa;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 1.125rem 1.25rem 1rem;
+}
+
+.card__hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.card__title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+/* ─── Body ─────────────────────────────────────────────────── */
+.card__body {
+  padding: 1rem 1.25rem;
+}
+
+.card__desc {
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  margin: 0 0 1rem;
+  transition: color 0.3s;
+}
+
+.card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Footer ───────────────────────────────────────────────── */
+.card__footer {
+  border-top: 1px solid #f3f4f6;
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.card__actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ─── Badges ───────────────────────────────────────────────── */
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.badge--priority-high  { background: #fce7e7; color: #b91c1c; }
+
+.badge--status-pending     { background: #f3f4f6; color: #6b7280; }
+.badge--status-in-progress { background: #eff6ff; color: #2563eb; }
+.badge--status-done        { background: #ecfdf5; color: #059669; }
+
+/* ─── Tag ──────────────────────────────────────────────────── */
+.tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* ─── Time chip ────────────────────────────────────────────── */
+.time-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+
+.due-date {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── Checkbox label ───────────────────────────────────────── */
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s, border 0.2s, transform 0.15s;
+}
+
+.check-input {
+  width: 15px;
+  height: 15px;
+  accent-color: #059669;
+  cursor: pointer;
+  margin: 0;
+}
+
+.check-text {
+  font-size: 12px;
+  font-weight: 500;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+/* ─── Buttons ──────────────────────────────────────────────── */
+.btn {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn--save   { background: #111827; color: #fff; border: none; }
+.btn--save:hover { background: #1f2937; }
+
+.btn--cancel { background: transparent; color: #6b7280; border: 1px solid #e5e7eb; }
+.btn--cancel:hover { background: #f9fafb; }
+
+.btn--edit   { background: transparent; color: #374151; border: 1px solid #e5e7eb; }
+.btn--edit:hover { background: #f9fafb; }
+
+.btn--delete { background: transparent; color: #dc2626; border: 1px solid #fecaca; }
+.btn--delete:hover { background: #fef2f2; }
+
+/* ─── Edit controls ────────────────────────────────────────── */
+.edit-input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9375rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.edit-input:focus { border-color: #6366f1; }
+
+.edit-textarea {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.8125rem;
+  font-family: 'DM Sans', sans-serif;
+  resize: vertical;
+  min-height: 72px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.edit-textarea:focus { border-color: #6366f1; }
+
+.edit-block { margin-bottom: 1rem; }
+
+.edit-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 0.5rem;
+}
+
+/* ─── Deleted state ────────────────────────────────────────── */
+.deleted-state {
+  text-align: center;
+  padding: 3rem;
+  color: #9ca3af;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.deleted-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.deleted-state p { margin: 0; }
+
+/* ─── Responsive ───────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .card__footer { flex-direction: column; align-items: flex-start; }
+}
+
+/* ─── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .card, .btn, .check-label { transition: none; }
+}
