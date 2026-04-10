@@ -1,6 +1,6 @@
 /* ─── Card ─────────────────────────────────────────────────── */
 .card {
-  width: min(460px, 100%);
+  width: min(460px, 92%);
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
@@ -8,6 +8,7 @@
   font-family: 'DM Sans', sans-serif;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
   transition: opacity 0.3s, transform 0.2s;
+  margin-top: 200px;
 }
 
 .card:hover {
@@ -18,13 +19,43 @@
 .card--done {
   opacity: 0.72;
 }
+/* ─── Card ─────────────────────────────────────────────────── */
+.card {
+  width: min(600px, 100%);
+  background: #fffaf5; /* soft cream */
+  border: 1px solid #eee7df; /* warm border */
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  transition: opacity 0.3s, transform 0.2s;
+
+}
 
 /* ─── Hero ─────────────────────────────────────────────────── */
 .card__hero {
-  background: #fafafa;
-  border-bottom: 1px solid #f3f4f6;
+  background: #fdf6f0; /* slightly darker cream */
+  border-bottom: 1px solid #f1e8df;
   padding: 1.125rem 1.25rem 1rem;
 }
+
+/* ─── Footer ───────────────────────────────────────────────── */
+.card__footer {
+  border-top: 1px solid #f1e8df;
+  padding: 0.75rem 1.25rem;
+}
+
+/* ─── Buttons (small polish) ───────────────────────────────── */
+.btn--cancel:hover { background: #fdf6f0; }
+.btn--edit:hover { background: #fdf6f0; }
+
+/* ─── Inputs focus (optional warm accent) ─────────────────── */
+.edit-input:focus,
+.edit-textarea:focus {
+  border-color: #d6a77a; /* soft warm brown */
+}
+/* ─── Hero ─────────────────────────────────────────────────── */
+
 
 .card__hero-header {
   display: flex;
@@ -72,15 +103,7 @@
 }
 
 /* ─── Footer ───────────────────────────────────────────────── */
-.card__footer {
-  border-top: 1px solid #f3f4f6;
-  padding: 0.875rem 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
+
 
 .card__actions {
   display: flex;
@@ -169,8 +192,6 @@
 .btn--save   { background: #111827; color: #fff; border: none; }
 .btn--save:hover { background: #1f2937; }
 
-.btn--cancel { background: transparent; color: #6b7280; border: 1px solid #e5e7eb; }
-.btn--cancel:hover { background: #f9fafb; }
 
 .btn--edit   { background: transparent; color: #374151; border: 1px solid #e5e7eb; }
 .btn--edit:hover { background: #f9fafb; }
@@ -191,7 +212,7 @@
   outline: none;
 }
 
-.edit-input:focus { border-color: #6366f1; }
+
 
 .edit-textarea {
   width: 100%;
@@ -206,7 +227,7 @@
   outline: none;
 }
 
-.edit-textarea:focus { border-color: #6366f1; }
+
 
 .edit-block { margin-bottom: 1rem; }
 
