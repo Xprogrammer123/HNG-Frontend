@@ -1,149 +1,200 @@
 /* ─── Card ─────────────────────────────────────────────────── */
 .card {
-  width: min(460px, 92%);
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  overflow: hidden;
-  font-family: 'DM Sans', sans-serif;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-  transition: opacity 0.3s, transform 0.2s;
-  margin-top: 200px;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
-}
-
-.card--done {
-  opacity: 0.72;
-}
-/* ─── Card ─────────────────────────────────────────────────── */
-.card {
   width: min(600px, 100%);
   background: #fffaf5; /* soft cream */
   border: 1px solid #eee7df; /* warm border */
   border-radius: 16px;
   overflow: hidden;
   font-family: 'DM Sans', sans-serif;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-  transition: opacity 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.05);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  margin-top: 200px;
+}
 
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 12px 32px rgba(0,0,0,0.08);
+}
+
+.card--done {
+  opacity: 0.65;
 }
 
 /* ─── Hero ─────────────────────────────────────────────────── */
 .card__hero {
-  background: #fdf6f0; /* slightly darker cream */
+  background: linear-gradient(135deg, #fdf6f0 0%, #faf5f0 100%);
   border-bottom: 1px solid #f1e8df;
-  padding: 1.125rem 1.25rem 1rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.card__hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 /* ─── Footer ───────────────────────────────────────────────── */
 .card__footer {
   border-top: 1px solid #f1e8df;
-  padding: 0.75rem 1.25rem;
-}
-
-/* ─── Buttons (small polish) ───────────────────────────────── */
-.btn--cancel:hover { background: #fdf6f0; }
-.btn--edit:hover { background: #fdf6f0; }
-
-/* ─── Inputs focus (optional warm accent) ─────────────────── */
-.edit-input:focus,
-.edit-textarea:focus {
-  border-color: #d6a77a; /* soft warm brown */
-}
-/* ─── Hero ─────────────────────────────────────────────────── */
-
-.edit-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.save-btn, .cancel-btn, .edit-btn, .delete-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.save-btn {
-  background: #2563eb;
-  color: white;
-}
-
-.save-btn:hover {
-  background: #1d4ed8;
-}
-
-.cancel-btn {
-  background: #f3f4f6;
-  color: #374151;
-}
-
-.cancel-btn:hover {
-  background: #e5e7eb;
-}
-
-.edit-btn, .delete-btn {
-  padding: 8px 14px;
-}
-
-.edit-btn:hover { background: #eff6ff; color: #1e40af; }
-.delete-btn:hover { background: #fef2f2; color: #b91c1c; }
-
-.action-buttons {
-  display: flex;
-  gap: 8px;
-}
-.card__hero-header {
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  background: #fdfbf9;
+}
+
+/* ─── Buttons (small polish) ───────────────────────────────── */
+.edit-input:focus,
+.edit-textarea:focus {
+  border-color: #d6a77a; /* soft warm brown */
+  box-shadow: 0 0 0 3px rgba(214, 167, 122, 0.1);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-action:active {
+  transform: scale(0.95);
+}
+
+.btn-action--save {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.btn-action--save:hover {
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-action--cancel {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.btn-action--cancel:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-action--edit {
+  background: transparent;
+  color: #1e40af;
+  border: 1.5px solid #bfdbfe;
+}
+
+.btn-action--edit:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.btn-action--delete {
+  background: transparent;
+  color: #b91c1c;
+  border: 1.5px solid #fecaca;
+}
+
+.btn-action--delete:hover {
+  background: #fef2f2;
+  border-color: #f87171;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 .card__title {
-  font-size: 1.0625rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
+  color: #1f2937;
   transition: color 0.3s, text-decoration 0.3s;
+  letter-spacing: -0.02em;
+}
+
+.card--done .card__title {
+  text-decoration: line-through;
+  color: #9ca3af;
 }
 
 /* ─── Body ─────────────────────────────────────────────────── */
 .card__body {
-  padding: 1rem 1.25rem;
+  padding: 1.5rem;
 }
 
 .card__desc {
-  font-size: 0.8125rem;
-  line-height: 1.65;
-  margin: 0 0 1rem;
-  transition: color 0.3s;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0 0 1.25rem;
+  color: #4b5563;
+  transition: color 0.3s, text-decoration 0.3s;
+  letter-spacing: 0.3px;
+}
+
+.card--done .card__desc {
+  text-decoration: line-through;
+  color: #9ca3af;
 }
 
 .card__meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.875rem;
+}
+
+.card__meta-left {
+  display: flex;
+  align-items: center;
+}
+
+.due-date-text {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
 }
 
 .card__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.card__tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  transition: all 0.2s;
 }
 
 /* ─── Footer ───────────────────────────────────────────────── */
@@ -156,42 +207,38 @@
 
 /* ─── Badges ───────────────────────────────────────────────── */
 .badge {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: 20px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  transition: all 0.2s;
 }
 
-.badge--priority-high  { background: #fce7e7; color: #b91c1c; }
+.badge--priority-high {
+  background: linear-gradient(135deg, #fce7e7 0%, #fce1e1 100%);
+  color: #b91c1c;
+  box-shadow: 0 2px 6px rgba(185, 28, 28, 0.15);
+}
 
-.badge--status-pending     { background: #f3f4f6; color: #6b7280; }
-.badge--status-in-progress { background: #eff6ff; color: #2563eb; }
-.badge--status-done        { background: #ecfdf5; color: #059669; }
-
-/* ─── Tag ──────────────────────────────────────────────────── */
-.tag {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 3px 10px;
-  border-radius: 20px;
-  display: inline-block;
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: capitalize;
 }
 
 /* ─── Time chip ────────────────────────────────────────────── */
 .time-chip {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.02em;
-}
-
-.due-date {
   font-size: 12px;
-  color: #9ca3af;
-  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+  display: inline-block;
+  transition: all 0.2s;
 }
 
 /* ─── Checkbox label ───────────────────────────────────────── */
@@ -200,85 +247,85 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 6px 10px;
   border-radius: 8px;
-  transition: background 0.2s, border 0.2s, transform 0.15s;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: rgba(5, 150, 105, 0.05);
+}
+
+.check-label:hover {
+  background: rgba(5, 150, 105, 0.1);
 }
 
 .check-input {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   accent-color: #059669;
   cursor: pointer;
   margin: 0;
+  transition: all 0.2s;
+}
+
+.check-input:hover {
+  transform: scale(1.15);
+}
+
+.check-input:checked {
+  background-color: #059669;
+  border-color: #059669;
 }
 
 .check-text {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   user-select: none;
   transition: color 0.2s;
+  color: #4b5563;
 }
-
-/* ─── Buttons ──────────────────────────────────────────────── */
-.btn {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.15s, transform 0.1s;
-}
-
-.btn:active { transform: scale(0.97); }
-
-.btn--save   { background: #111827; color: #fff; border: none; }
-.btn--save:hover { background: #1f2937; }
-
-
-.btn--edit   { background: transparent; color: #374151; border: 1px solid #e5e7eb; }
-.btn--edit:hover { background: #f9fafb; }
-
-.btn--delete { background: transparent; color: #dc2626; border: 1px solid #fecaca; }
-.btn--delete:hover { background: #fef2f2; }
 
 /* ─── Edit controls ────────────────────────────────────────── */
 .edit-input {
   width: 100%;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 0.9375rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  font-size: 1rem;
   font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   box-sizing: border-box;
   outline: none;
+  transition: all 0.2s;
+  background: #fafbfc;
 }
 
-
+.edit-input:focus {
+  background: white;
+  border-color: #d6a77a;
+}
 
 .edit-textarea {
   width: 100%;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 0.8125rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  font-size: 0.9375rem;
   font-family: 'DM Sans', sans-serif;
   resize: vertical;
-  min-height: 72px;
+  min-height: 80px;
   box-sizing: border-box;
   outline: none;
+  transition: all 0.2s;
+  background: #fafbfc;
+  line-height: 1.6;
 }
 
+.edit-textarea:focus {
+  background: white;
+  border-color: #d6a77a;
+}
 
-
-.edit-block { margin-bottom: 1rem; }
-
-.edit-actions {
-  display: flex;
-  gap: 6px;
-  margin-top: 0.5rem;
+.edit-block {
+  margin-bottom: 0.5rem;
 }
 
 /* ─── Deleted state ────────────────────────────────────────── */

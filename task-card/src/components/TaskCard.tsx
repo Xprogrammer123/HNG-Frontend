@@ -1,6 +1,6 @@
-import './TaskCard.css';
+import "./TaskCard.css";
 import { useState, useEffect, useCallback } from "react";
-import { Edit2, Trash2, Check, X } from 'lucide-react';
+import { Edit2, Trash2, Check, X } from "lucide-react";
 
 /* ---------------- TYPES ---------------- */
 
@@ -102,7 +102,7 @@ export default function TaskCard() {
 
   const [title, setTitle] = useState("Design System Review");
   const [desc, setDesc] = useState(
-    "Review the new design system components and provide feedback on accessibility and consistency across the design tokens."
+    "Review the new design system components and provide feedback on accessibility and consistency across the design tokens.",
   );
 
   const [editTitle, setEditTitle] = useState(title);
@@ -145,13 +145,18 @@ export default function TaskCard() {
   }
 
   return (
-    <article data-testid="test-todo-card" className={`card${done ? " card--done" : ""}`}>
-      
+    <article
+      data-testid="test-todo-card"
+      className={`card${done ? " card--done" : ""}`}
+    >
       {/* HERO */}
       <section className="card__hero">
-        <header className="card__hero-header">
-          <span data-testid="test-todo-priority" className="badge badge--priority-high">
-            High
+        <div className="card__hero-header">
+          <span
+            data-testid="test-todo-priority"
+            className="badge badge--priority-high"
+          >
+            High Priority
           </span>
 
           <label className="check-label">
@@ -164,10 +169,10 @@ export default function TaskCard() {
               aria-label="Mark task as complete"
             />
             <span className="check-text">
-              {done ? "Completed" : "Mark as done"}
+              {done ? "✓ Completed" : "Mark complete"}
             </span>
           </label>
-        </header>
+        </div>
 
         {editing ? (
           <input
@@ -191,21 +196,24 @@ export default function TaskCard() {
               className="edit-textarea"
               value={editDesc}
               onChange={(e) => setEditDesc(e.target.value)}
+              placeholder="Enter task description..."
             />
             <div className="edit-actions">
-              <button 
+              <button
                 onClick={saveEdit}
-                className="save-btn"
+                className="btn-action btn-action--save"
+                title="Save changes"
               >
-                <Check size={18} />
-                Save changes
+                <Check size={16} />
+                <span>Save</span>
               </button>
-              <button 
+              <button
                 onClick={() => setEditing(false)}
-                className="cancel-btn"
+                className="btn-action btn-action--cancel"
+                title="Cancel editing"
               >
-                <X size={18} />
-                Cancel
+                <X size={16} />
+                <span>Cancel</span>
               </button>
             </div>
           </div>
@@ -217,12 +225,15 @@ export default function TaskCard() {
 
         {!editing && (
           <div className="card__meta">
-            <time
-              data-testid="test-todo-due-date"
-              dateTime={DUE_DATE.toISOString()}
-            >
-              Due {dueFmt}
-            </time>
+            <div className="card__meta-left">
+              <time
+                data-testid="test-todo-due-date"
+                dateTime={DUE_DATE.toISOString()}
+                className="due-date-text"
+              >
+                📅 {dueFmt}
+              </time>
+            </div>
 
             <span
               data-testid="test-todo-time-remaining"
@@ -238,10 +249,14 @@ export default function TaskCard() {
           </div>
         )}
 
-        <ul data-testid="test-todo-tags" role="list">
+        <ul data-testid="test-todo-tags" className="card__tags" role="list">
           {TAGS.map(({ id, label }) => (
             <li key={id}>
-              <span data-testid={`test-todo-tag-${id}`} style={TAG_STYLES[id]}>
+              <span
+                data-testid={`test-todo-tag-${id}`}
+                className="card__tag"
+                style={TAG_STYLES[id]}
+              >
                 {label}
               </span>
             </li>
@@ -251,7 +266,7 @@ export default function TaskCard() {
 
       {/* FOOTER */}
       <footer className="card__footer">
-        <span data-testid="test-todo-status">
+        <span data-testid="test-todo-status" className="status-badge">
           {status}
         </span>
 
@@ -263,19 +278,21 @@ export default function TaskCard() {
               setEditDesc(desc);
               setEditing(true);
             }}
-            className="edit-btn"
+            className="btn-action btn-action--edit"
+            title="Edit task"
           >
-            <Edit2 size={18} />
-            Edit
+            <Edit2 size={16} />
+            <span>Edit</span>
           </button>
 
           <button
             data-testid="test-todo-delete-button"
             onClick={handleDelete}
-            className="delete-btn"
+            className="btn-action btn-action--delete"
+            title="Delete task"
           >
-            <Trash2 size={18} />
-            Delete
+            <Trash2 size={16} />
+            <span>Delete</span>
           </button>
         </div>
       </footer>
