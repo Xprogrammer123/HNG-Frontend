@@ -13,9 +13,13 @@
         <header class="card__hero-header">
           <span data-testid="test-todo-priority" class="priority-badge priority-high">High</span>
           <div class="card__icon">
-            <svg height="20" width="20" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" stroke-linejoin="round" stroke-linecap="round"></path>
-            </svg>
+             <label class="todo-complete-label">
+            <input 
+              type="checkbox" 
+              data-testid="test-todo-complete-toggle" 
+              class="todo-complete-toggle"
+              aria-label="Mark task as complete"
+            >
           </div>
         </header>
         <h2 data-testid="test-todo-title" class="card__job-title">Design System Review</h2>
@@ -52,15 +56,6 @@
        
         
         <div class="card__actions">
-          <label class="todo-complete-label">
-            <input 
-              type="checkbox" 
-              data-testid="test-todo-complete-toggle" 
-              class="todo-complete-toggle"
-              aria-label="Mark task as complete"
-            >
-            <span class="todo-complete-text">Complete</span>
-          </label>
           
           <button data-testid="test-todo-edit-button" class="card__btn card__btn--edit" aria-label="Edit task">Edit</button>
           <button data-testid="test-todo-delete-button" class="card__btn card__btn--delete" aria-label="Delete task">Delete</button>
