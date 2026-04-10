@@ -108,7 +108,6 @@ export default function TaskCard() {
   const [editDesc, setEditDesc] = useState(desc);
 
   const [timeInfo, setTimeInfo] = useState<TimeInfo>(calcTime);
-  const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setTimeInfo(calcTime()), 30000);
@@ -116,10 +115,8 @@ export default function TaskCard() {
   }, []);
 
   const handleCheck = useCallback(() => {
-    setDone((p) => !p);
-    setPulse(true);
-    setTimeout(() => setPulse(false), 600);
-  }, []);
+  setDone((p) => !p);
+}, []);
 
   const handleDelete = useCallback(() => setDeleted(true), []);
 

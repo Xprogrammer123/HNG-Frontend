@@ -1,8 +1,9 @@
-
 import TaskCard from '../components/TaskCard'
 import { render, screen, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi } from 'vitest'
+import '@testing-library/jest-dom'
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function renderCard() {
@@ -145,7 +146,9 @@ describe('Completion toggle', () => {
     const user = userEvent.setup()
     renderCard()
     await user.click(screen.getByTestId('test-todo-complete-toggle'))
-    expect(screen.getByTestId('test-todo-title')).toHaveStyle('text-decoration: line-through')
+    expect(screen.getByTestId('test-todo-title')).toHaveStyle({
+      textDecoration: 'line-through',
+    })
   })
 
   it('unchecking restores status to "Pending"', async () => {
@@ -216,18 +219,22 @@ describe('Time remaining display', () => {
   it('shows a non-empty time remaining string on load', () => {
     renderCard()
     const el = screen.getByTestId('test-todo-time-remaining')
-    expect(el.textContent.trim().length).toBeGreaterThan(0)
+    expect((el.textContent ?? '').trim().length).toBeGreaterThan(0)
   })
 
   it('refreshes time remaining every 30 seconds', () => {
     vi.useFakeTimers()
     renderCard()
-    const before = screen.getByTestId('test-todo-time-remaining').textContent
-    act(() => { vi.advanceTimersByTime(30000) })
+
+    act(() => {
+      vi.advanceTimersByTime(30000)
+    })
+
     const after = screen.getByTestId('test-todo-time-remaining').textContent
-    // Content stays valid (still a string); value only differs if minute ticked
+
     expect(typeof after).toBe('string')
-    expect(after.length).toBeGreaterThan(0)
+    expect((after ?? '').length).toBeGreaterThan(0)
+
     vi.useRealTimers()
   })
 
