@@ -64,7 +64,3 @@ A semantic and accessible user information card focused on precision and layout 
 ## 🛠️ Known Limitations
 - **LocalStorage**: Current state (tasks/profile) is not persisted across reloads (in-memory state only).
 - **Dynamic Tags**: Tag addition/removal in Task 1a is via the Edit form, but the UI currently displays a fixed set of demo tags.
-
-## 🚀 Getting Started
-1. Clone the repository.
-2. Open `task1a/index.html` or `task1b/profile.html` directly in any modern web browser.
