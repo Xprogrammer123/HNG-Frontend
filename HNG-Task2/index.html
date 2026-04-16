@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Todo Card - Stage 1a</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="container">
+        <!-- The Todo Card -->
+        <article id="todo-card" data-testid="test-todo-card" class="card">
+            
+            <!-- View Mode Container -->
+            <div id="view-mode">
+                <section class="card__hero">
+                    <div class="card__hero-header">
+                        <div class="priority-wrapper">
+                            <span id="priority-badge" data-testid="test-todo-priority" class="badge">
+                                High Priority
+                            </span>
+                            <div id="priority-indicator" data-testid="test-todo-priority-indicator" class="priority-dot"></div>
+                        </div>
+
+                        <label class="check-label">
+                            <input type="checkbox" id="complete-toggle" data-testid="test-todo-complete-toggle" class="check-input">
+                            <span id="complete-text" class="check-text">Mark complete</span>
+                        </label>
+                    </div>
+
+                    <h2 id="todo-title" data-testid="test-todo-title" class="card__title">Design System Review</h2>
+                </section>
+
+                <div class="card__body">
+                    <!-- Description with Expand/Collapse -->
+                    <div id="collapsible-section" data-testid="test-todo-collapsible-section" class="collapsible-container collapsed">
+                        <p id="todo-description" data-testid="test-todo-description" class="card__desc">
+                            Review the new design system components and provide feedback on accessibility and consistency across the design tokens. This is a longer description to test the collapse functionality.
+                        </p>
+                    </div>
+                    <button id="expand-toggle" data-testid="test-todo-expand-toggle" class="expand-btn" aria-expanded="false" aria-controls="collapsible-section">
+                        Show more
+                    </button>
+
+                    <div class="card__meta">
+                        <div class="card__meta-left">
+                            <time id="todo-due-date" data-testid="test-todo-due-date" class="due-date-text">
+                                📅 Oct 25, 2026
+                            </time>
+                        </div>
+
+                        <div class="time-status-wrapper">
+                            <span id="overdue-indicator" data-testid="test-todo-overdue-indicator" class="overdue-badge hidden">Overdue</span>
+                            <span id="time-remaining" data-testid="test-todo-time-remaining" aria-live="polite" class="time-chip">
+                                Due in 2 days
+                            </span>
+                        </div>
+                    </div>
+
+                    <ul data-testid="test-todo-tags" class="card__tags" role="list">
+                        <li><span data-testid="test-todo-tag-work" class="card__tag tag-work">work</span></li>
+                        <li><span data-testid="test-todo-tag-urgent" class="card__tag tag-urgent">urgent</span></li>
+                        <li><span data-testid="test-todo-tag-design" class="card__tag tag-design">design</span></li>
+                    </ul>
+                </div>
+
+                <footer class="card__footer">
+                    <div class="status-control-wrapper">
+                        <span id="todo-status" data-testid="test-todo-status" class="status-badge">Pending</span>
+                        <select id="status-control" data-testid="test-todo-status-control" aria-label="Change status" class="status-select">
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="edit-button" data-testid="test-todo-edit-button" class="btn-action btn-action--edit" title="Edit task">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            <span>Edit</span>
+                        </button>
+                        <button id="delete-button" data-testid="test-todo-delete-button" class="btn-action btn-action--delete" title="Delete task">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                </footer>
+            </div>
+
+            <!-- Edit Mode Container (Hidden by default) -->
+            <form id="edit-form" data-testid="test-todo-edit-form" class="card__edit-form hidden">
+                <h3 class="edit-form-title">Edit Task</h3>
+                
+                <div class="form-group">
+                    <label for="edit-title">Title</label>
+                    <input type="text" id="edit-title" data-testid="test-todo-edit-title-input" class="edit-field" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" data-testid="test-todo-edit-description-input" class="edit-field" rows="3"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="edit-priority">Priority</label>
+                        <select id="edit-priority" data-testid="test-todo-edit-priority-select" class="edit-field">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group half">
+                        <label for="edit-due-date">Due Date</label>
+                        <input type="datetime-local" id="edit-due-date" data-testid="test-todo-edit-due-date-input" class="edit-field">
+                    </div>
+                </div>
+
+                <div class="edit-actions">
+                    <button type="button" id="save-button" data-testid="test-todo-save-button" class="btn-action btn-action--save">
+                        <span>Save Changes</span>
+                    </button>
+                    <button type="button" id="cancel-button" data-testid="test-todo-cancel-button" class="btn-action btn-action--cancel">
+                        <span>Cancel</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Deleted State (Hidden by default) -->
+            <div id="deleted-state" class="deleted-state hidden">
+                <div class="deleted-icon">✓</div>
+                <p>Task has been deleted</p>
+                <button id="undo-delete" class="btn-undo">Undo</button>
+            </div>
+        </article>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
