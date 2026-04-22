@@ -1,0 +1,95 @@
+[
+  {
+    "id": "RT3080",
+    "createdAt": "2023-08-05",
+    "paymentDue": "2023-08-12",
+    "description": "Web Design",
+    "paymentTerms": 7,
+    "clientName": "Jensen Huang",
+    "clientEmail": "jensenh@mail.com",
+    "status": "paid",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "106 Kendell Street",
+      "city": "Sharrington",
+      "postCode": "NR24 5WQ",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "name": "Brand Guidelines",
+        "quantity": 1,
+        "price": 1800.90,
+        "total": 1800.90
+      }
+    ],
+    "total": 1800.90
+  },
+  {
+    "id": "XM9141",
+    "createdAt": "2023-08-21",
+    "paymentDue": "2023-09-20",
+    "description": "Graphic Design",
+    "paymentTerms": 30,
+    "clientName": "Millie Sanders",
+    "clientEmail": "millie@mail.com",
+    "status": "pending",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "79 Dover Road",
+      "city": "Wereham",
+      "postCode": "PE33 9GF",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "name": "Logo Design",
+        "quantity": 1,
+        "price": 1600.00,
+        "total": 1600.00
+      }
+    ],
+    "total": 1600.00
+  },
+  {
+    "id": "RG0314",
+    "createdAt": "2023-09-24",
+    "paymentDue": "2023-10-01",
+    "description": "Website Redesign",
+    "paymentTerms": 7,
+    "clientName": "Rocky Howell",
+    "clientEmail": "rocky@mail.com",
+    "status": "draft",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "968 Nolan Road",
+      "city": "Paxleys",
+      "postCode": "CR0 2EF",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "name": "Redesign",
+        "quantity": 1,
+        "price": 14002.33,
+        "total": 14002.33
+      }
+    ],
+    "total": 14002.33
+  }
+]
