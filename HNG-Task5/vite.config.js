@@ -2,9 +2,20 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path, { resolve } from 'path'
 
-// https://vite.dev/config/
+// Custom plugin to remove crossorigin and other attributes for Chrome Extension compatibility
+const removeAttributes = () => {
+  return {
+    name: 'remove-attributes',
+    transformIndexHtml(html) {
+      return html
+        .replace(/crossorigin/g, '')
+        .replace(/type="module"/g, 'type="module"'); // keep type module but clean it up
+    }
+  }
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), removeAttributes()],
   base: './',
   build: {
     modulePreload: false,

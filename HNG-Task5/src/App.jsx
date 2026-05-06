@@ -1,9 +1,19 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Sparkles, Settings, Copy, Check, Globe, FileText, Loader2, AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { 
+  Sparkles, 
+  Settings, 
+  Copy, 
+  Check, 
+  Globe, 
+  RefreshCw, 
+  Clock, 
+  AlertCircle, 
+  Moon, 
+  Sun,
+  ExternalLink
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 function App() {
   const [summary, setSummary] = useState('')
@@ -11,217 +21,288 @@ function App() {
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
   const [pageInfo, setPageInfo] = useState({ title: '', url: '' })
+  const [activeTab, setActiveTab] = useState('summary')
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    // Get current tab info
+    // Load state from chrome.storage
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tab = tabs[0];
+        const tab = tabs[0]
         if (tab) {
-          setPageInfo({ title: tab.title, url: tab.url });
-          
-          // Check for cached summary in storage
-          chrome.storage.local.get(['lastSummary', 'lastUrl'], (result) => {
+          setPageInfo({ title: tab.title, url: tab.url })
+          chrome.storage.local.get(['lastSummary', 'lastUrl', 'theme'], (result) => {
             if (tab.url === result.lastUrl) {
-              setSummary(result.lastSummary || '');
+              setSummary(result.lastSummary || '')
             }
-          });
+            if (result.theme === 'dark') {
+              setIsDark(true)
+            }
+          })
         }
-      });
+      })
     }
-  }, []);
+  }, [])
+
+  // Update theme in storage
+  const toggleTheme = () => {
+    const newDark = !isDark
+    setIsDark(newDark)
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      chrome.storage.local.set({ theme: newDark ? 'dark' : 'light' })
+    }
+  }
 
   const handleSummarize = async () => {
-    setLoading(true);
-    setError('');
-    
+    setLoading(true)
+    setError('')
+
     try {
       if (typeof chrome === 'undefined' || !chrome.tabs) {
-        throw new Error("Chrome API not available. Are you running this as an extension?");
+        throw new Error('Chrome API not available')
       }
 
-      // 1. Get content from content script
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      
-      // Inject content script if not already there (fail-safe)
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+      if (!tab || !tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('edge://') || tab.url.startsWith('about:')) {
+        throw new Error('AI cannot read browser system pages. Please try on a regular website.')
+      }
+
       try {
         await chrome.scripting.executeScript({
           target: { tabId: tab.id },
-          files: ['content/content.js']
-        });
+          files: ['content/content.js'],
+        })
       } catch (e) {
-        console.log("Content script might already be injected:", e);
-      }
-      
-      const response = await chrome.tabs.sendMessage(tab.id, { action: "getPageContent" });
-      
-      if (!response) {
-        throw new Error("Could not extract page content. Try refreshing the page.");
+        console.log('Script injection skipped or failed:', e)
       }
 
-      // 2. Send to background script for summarization
-      chrome.runtime.sendMessage(
-        { action: "summarize", data: response },
-        (res) => {
-          if (chrome.runtime.lastError) {
-            setError(chrome.runtime.lastError.message);
-            setLoading(false);
-            return;
-          }
-          
-          if (res.success) {
-            setSummary(res.summary);
-            // Cache result
-            chrome.storage.local.set({ lastSummary: res.summary, lastUrl: tab.url });
-          } else {
-            setError(res.error || "Summarization failed");
-          }
-          setLoading(false);
+      // Add a tiny delay to ensure listener is ready
+      await new Promise(r => setTimeout(r, 100))
+
+      const response = await chrome.tabs.sendMessage(tab.id, { action: 'getPageContent' }).catch(err => {
+        if (err.message.includes('Could not establish connection')) {
+          throw new Error('Extension updated! Please REFRESH the webpage once to allow AI access.')
         }
-      );
+        throw err
+      })
+
+      if (!response) {
+        throw new Error('Could not extract page content. Try refreshing the page.')
+      }
+
+      chrome.runtime.sendMessage({ action: 'summarize', data: response }, (res) => {
+        if (chrome.runtime.lastError) {
+          setError(chrome.runtime.lastError.message)
+          setLoading(false)
+          return
+        }
+
+        if (res.success) {
+          setSummary(res.summary)
+          chrome.storage.local.set({ lastSummary: res.summary, lastUrl: tab.url })
+        } else {
+          setError(res.error || 'Summarization failed')
+        }
+        setLoading(false)
+      })
     } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      setError(err.message)
+      setLoading(false)
     }
-  };
+  }
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(summary);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    navigator.clipboard.writeText(summary)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const hostname = (() => {
+    try { return new URL(pageInfo.url).hostname } catch { return pageInfo.url }
+  })()
 
   return (
-    <div className="w-[400px] min-h-[500px] bg-background p-4 font-sans text-foreground shadow-2xl overflow-hidden flex flex-col">
-      <header className="flex items-center justify-between mb-6 shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="p-2 bg-primary rounded-lg text-primary-foreground shadow-lg shadow-primary/30">
-            <Sparkles size={20} />
-          </div>
-          <h1 className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:to-purple-400">
-            AI Summarizer
-          </h1>
-        </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Settings size={20} className="text-muted-foreground" />
-        </Button>
-      </header>
-
-      <main className="flex-1 overflow-hidden flex flex-col space-y-4">
-        {/* Page Info Card */}
-        <Card className="shrink-0 border-muted">
-          <CardContent className="p-3">
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-muted rounded-md text-muted-foreground">
-                <Globe size={16} />
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <h2 className="font-semibold text-xs truncate leading-relaxed">
-                  {pageInfo.title || 'Unknown Webpage'}
-                </h2>
-                <p className="text-[10px] text-muted-foreground truncate tracking-wide">{pageInfo.url || 'No URL detected'}</p>
-              </div>
+    <div className={cn("w-[400px] h-[500px] flex flex-col font-sans transition-colors duration-200", isDark ? "dark" : "")}>
+      <div className="flex-1 bg-background text-foreground flex flex-col overflow-hidden">
+        
+        {/* Header */}
+        <header className="flex items-center justify-between px-4 h-12 border-b border-border shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-6 h-6 bg-foreground rounded flex items-center justify-center">
+              <Sparkles size={14} className="text-background" />
             </div>
-          </CardContent>
-        </Card>
+            <span className="font-semibold text-[14px] tracking-tight">AI Summarizer</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={toggleTheme}
+              className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-accent transition-colors text-muted-foreground"
+            >
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-accent transition-colors text-muted-foreground">
+              <Settings size={16} />
+            </button>
+          </div>
+        </header>
 
-        {/* Action Button / Summary State */}
-        <div className="flex-1 overflow-hidden flex flex-col">
+        {/* URL Bar */}
+        <div className="px-4 py-2 flex items-center gap-2 border-b border-border bg-muted/30">
+          <div className="p-1 bg-background border border-border rounded shadow-sm shrink-0">
+            <Globe size={10} className="text-muted-foreground" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[11px] font-medium truncate leading-tight">
+              {pageInfo.title || 'Loading page...'}
+            </div>
+            <div className="text-[10px] text-muted-foreground truncate leading-tight">
+              {hostname || 'Detecting URL...'}
+            </div>
+          </div>
+          <a 
+            href={pageInfo.url} 
+            target="_blank" 
+            rel="noreferrer"
+            className="p-1 hover:bg-accent rounded text-muted-foreground transition-colors"
+          >
+            <ExternalLink size={10} />
+          </a>
+        </div>
+
+        {/* Content Area */}
+        <main className="flex-1 overflow-hidden flex flex-col">
           {!summary && !loading && !error && (
-            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-5 animate-in fade-in zoom-in duration-500">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full"></div>
-                <Card className="relative w-20 h-20 flex items-center justify-center text-primary shadow-xl border-muted">
-                  <FileText size={36} />
-                </Card>
-              </div>
-              <div className="px-4">
-                <h3 className="font-bold">Ready to summarize</h3>
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                  Get key insights and takeaways from this page in seconds with Groq's high-speed AI.
+            <div className="flex-1 flex flex-col p-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold tracking-tight mb-2">Summarize this page</h2>
+                <p className="text-[13px] text-muted-foreground leading-relaxed">
+                  Get a concise summary and key insights from the current webpage using Groq's high-speed AI.
                 </p>
               </div>
-              <Button
-                onClick={handleSummarize}
-                className="w-full h-14 rounded-2xl shadow-xl shadow-primary/30 text-base font-bold group"
-              >
-                <Sparkles size={18} className="mr-2 group-hover:animate-pulse" />
-                Summarize Now
-              </Button>
+              <div className="mt-auto">
+                <button 
+                  onClick={handleSummarize}
+                  className="w-full h-10 bg-foreground text-background font-medium rounded-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2 text-sm"
+                >
+                  <Sparkles size={14} />
+                  Generate Summary
+                </button>
+              </div>
             </div>
           )}
 
           {loading && (
-            <div className="flex-1 flex flex-col items-center justify-center space-y-6">
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-muted rounded-full"></div>
-                <div className="absolute inset-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
+              <div className="w-full max-w-[200px] h-1 bg-muted rounded-full overflow-hidden">
+                <div className="h-full bg-foreground w-1/3 rounded-full animate-loading-bar" />
               </div>
-              <div className="text-center">
-                <p className="font-bold text-lg tracking-tight">AI is Reading...</p>
-                <p className="text-muted-foreground text-sm mt-1 animate-pulse">Llama 3.3 @ Groq Speed</p>
-              </div>
+              <p className="text-xs text-muted-foreground animate-pulse tracking-wide">
+                ANALYZING CONTENT...
+              </p>
+              <style>{`
+                @keyframes loading-bar {
+                  0% { transform: translateX(-100%); }
+                  100% { transform: translateX(300%); }
+                }
+                .animate-loading-bar {
+                  animation: loading-bar 1.5s infinite ease-in-out;
+                }
+              `}</style>
             </div>
           )}
 
-          {error && (
-            <div className="flex-1 flex flex-col items-center justify-center p-6 bg-destructive/10 border border-destructive/20 rounded-2xl text-center space-y-4">
-              <div className="p-3 bg-destructive/20 rounded-full text-destructive">
-                <AlertCircle size={32} />
+          {error && !loading && (
+            <div className="flex-1 flex flex-col p-6 gap-4">
+              <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg flex gap-3">
+                <AlertCircle size={16} className="text-destructive shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-semibold text-destructive">Something went wrong</h3>
+                  <p className="text-xs text-destructive/80 mt-1 leading-relaxed">{error}</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-destructive">Extraction Error</h4>
-                <p className="text-sm text-destructive/80 mt-1">{error}</p>
-              </div>
-              <Button
-                variant="destructive"
+              <button 
                 onClick={handleSummarize}
-                className="px-6 rounded-xl font-bold"
+                className="w-full h-10 border border-border rounded-md hover:bg-accent transition-colors text-sm font-medium"
               >
                 Try Again
-              </Button>
+              </button>
             </div>
           )}
 
           {summary && !loading && (
-            <div className="flex-1 flex flex-col space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden">
-              <div className="flex items-center justify-between shrink-0">
-                <Badge variant="outline" className="text-[10px] uppercase tracking-[0.2em] px-2 py-0.5 border-primary/20 text-primary">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse mr-2"></span>
-                  Insights Found
-                </Badge>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={copyToClipboard}
-                  className="h-7 text-[10px] font-bold px-2 border-muted"
-                >
-                  {copied ? <Check size={12} className="mr-1" /> : <Copy size={12} className="mr-1" />}
-                  {copied ? 'Copied' : 'Copy'}
-                </Button>
+            <div className="flex-1 flex flex-col overflow-hidden animate-in fade-in duration-300">
+              {/* Tabs */}
+              <div className="flex px-4 border-b border-border">
+                {['Summary', 'Insights', 'Takeaways'].map((tab) => {
+                  const key = tab.toLowerCase()
+                  const active = activeTab === key
+                  return (
+                    <button 
+                      key={key} 
+                      onClick={() => setActiveTab(key)}
+                      className={cn(
+                        "px-3 py-2.5 text-xs font-medium border-b-2 transition-colors",
+                        active 
+                          ? "border-foreground text-foreground" 
+                          : "border-transparent text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {tab}
+                    </button>
+                  )
+                })}
               </div>
-              
-              <div className="flex-1 bg-card border border-muted rounded-2xl p-4 shadow-inner overflow-y-auto custom-scrollbar prose dark:prose-invert prose-slate prose-sm max-w-none">
-                <ReactMarkdown>{summary}</ReactMarkdown>
+
+              {/* Toolbar */}
+              <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/10 shrink-0">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                  {activeTab}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button 
+                    onClick={copyToClipboard}
+                    className="h-7 px-2 flex items-center gap-1.5 rounded hover:bg-accent text-[11px] font-medium transition-colors border border-border bg-background"
+                  >
+                    {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
+                    {copied ? 'Copied' : 'Copy'}
+                  </button>
+                  <button 
+                    onClick={handleSummarize}
+                    className="h-7 w-7 flex items-center justify-center rounded hover:bg-accent transition-colors border border-border bg-background"
+                  >
+                    <RefreshCw size={12} />
+                  </button>
+                </div>
               </div>
-              
-              <Button
-                variant="secondary"
-                onClick={handleSummarize}
-                className="shrink-0 w-full rounded-xl text-xs font-bold tracking-wide"
-              >
-                Regenerate Summary
-              </Button>
+
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                {activeTab === 'summary' ? (
+                  <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-bold prose-p:leading-relaxed prose-p:text-foreground/90">
+                    <ReactMarkdown>{summary}</ReactMarkdown>
+                  </div>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
+                    <Clock size={24} className="opacity-20" />
+                    <p className="text-xs italic">Feature coming soon...</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer Info */}
+              <div className="px-4 py-2 border-t border-border bg-muted/20 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-tight">
+                    llama-3.3-70b · groq cloud
+                  </span>
+                </div>
+              </div>
             </div>
           )}
-        </div>
-      </main>
-
-      <footer className="mt-6 pt-4 border-t border-muted text-center shrink-0">
-        <p className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.3em]">
-          Groq Powered Intelligence
-        </p>
-      </footer>
+        </main>
+      </div>
     </div>
   )
 }
