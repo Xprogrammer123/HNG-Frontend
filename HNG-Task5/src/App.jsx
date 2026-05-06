@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Sparkles, Settings, Copy, Check, Globe, FileText, Loader2, AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 function App() {
   const [summary, setSummary] = useState('')
@@ -89,19 +92,19 @@ function App() {
   };
 
   return (
-    <div className="w-[400px] min-h-[500px] bg-slate-50 dark:bg-slate-950 p-4 font-sans text-slate-900 dark:text-slate-100 shadow-2xl overflow-hidden flex flex-col">
+    <div className="w-[400px] min-h-[500px] bg-background p-4 font-sans text-foreground shadow-2xl overflow-hidden flex flex-col">
       <header className="flex items-center justify-between mb-6 shrink-0">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-indigo-600 rounded-lg text-white shadow-lg shadow-indigo-500/30">
+          <div className="p-2 bg-primary rounded-lg text-primary-foreground shadow-lg shadow-primary/30">
             <Sparkles size={20} />
           </div>
-          <h1 className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
+          <h1 className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:to-purple-400">
             AI Summarizer
           </h1>
         </div>
-        <button className="p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors">
-          <Settings size={20} />
-        </button>
+        <Button variant="ghost" size="icon" className="rounded-full">
+          <Settings size={20} className="text-muted-foreground" />
+        </Button>
       </header>
 
       <main className="flex-1 overflow-hidden flex flex-col space-y-4">
