@@ -2,8 +2,7 @@
  * Background service worker for handling AI requests via Groq.
  */
 
-// We'll try to get this from storage, but keep a placeholder if needed
-let GROQ_API_KEY = "";
+// API Key will be retrieved dynamically from storage or environment variables
 
 // Handle messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -23,7 +22,9 @@ async function handleSummarization(data) {
   
   // Retrieve the API key from storage before every request
   const storage = await chrome.storage.local.get(['apiKey']);
-  const API_KEY = storage.apiKey || "REDACTED"; // Default fallback (optional)
+  
+  // Priority: User-provided key > Environment variable
+  const API_KEY = storage.apiKey || import.meta.env.VITE_GROQ_API_KEY;
 
   if (!API_KEY || API_KEY.trim() === "") {
     throw new Error("API Key is missing. Please add your Groq API Key in Settings.");
