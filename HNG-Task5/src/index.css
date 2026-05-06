@@ -54,12 +54,14 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    width: 400px;
-    height: 500px;
     margin: 0;
+    padding: 0;
     overflow: hidden;
+    background: transparent;
+  }
+  html {
+    margin: 0;
+    padding: 0;
   }
 }
 
