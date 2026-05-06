@@ -55,6 +55,10 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    width: 400px;
+    height: 500px;
+    margin: 0;
+    overflow: hidden;
   }
 }
 
