@@ -85,7 +85,7 @@ export const cryptoService = {
         hash: "SHA-256",
       },
       baseKey,
-      KW_PARAMS,
+      { name: "AES-GCM", length: 256 },
       true,
       ["wrapKey", "unwrapKey"]
     );
@@ -97,25 +97,39 @@ export const cryptoService = {
    * Wraps (encrypts) a private key using a derived password key.
    */
   async wrapPrivateKey(privateKey, wrappingKey) {
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
     const wrapped = await window.crypto.subtle.wrapKey(
       "pkcs8",
       privateKey,
       wrappingKey,
-      "AES-KW"
+      { name: "AES-GCM", iv }
     );
-    return bufferToBase64(wrapped);
+    
+    // Prepend IV to the wrapped key
+    const wrappedArray = new Uint8Array(wrapped);
+    const combined = new Uint8Array(iv.length + wrappedArray.length);
+    combined.set(iv);
+    combined.set(wrappedArray, iv.length);
+    
+    return bufferToBase64(combined.buffer);
   },
 
   /**
    * Unwraps (decrypts) a private key using a derived password key.
    */
   async unwrapPrivateKey(wrappedKeyBase64, unwrappingKey) {
-    const wrappedBuf = base64ToBuffer(wrappedKeyBase64);
+    const combinedBuf = base64ToBuffer(wrappedKeyBase64);
+    const combined = new Uint8Array(combinedBuf);
+    
+    // Extract IV (first 12 bytes) and the wrapped key
+    const iv = combined.slice(0, 12);
+    const wrappedBuf = combined.slice(12).buffer;
+
     return await window.crypto.subtle.unwrapKey(
       "pkcs8",
       wrappedBuf,
       unwrappingKey,
-      "AES-KW",
+      { name: "AES-GCM", iv },
       RSA_PARAMS,
       true,
       ["decrypt"]
